@@ -42,12 +42,12 @@ public class CrptApi {
             lock.unlock();
         }
         String jsonBody = objectMapper.writeValueAsString(document);
+        System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://ismp.crpt.ru/api/v3/lk/documents/create")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(jsonBody)).build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
             throw new RuntimeException("Failed to create document: " + response.body());
         }
-        System.out.println(response.body());
         lock.lock();
         try {
             synchronized (lock) {
